@@ -33,8 +33,12 @@ const proxyWorker2 = createProxyMiddleware({
     changeOrigin: true,
     pathRewrite: { '^/api/orders': '/orders' }, 
 });
-app.use('/api/users', proxyWorker, next);
-app.use('/api/orders', proxyWorker2, next);
+
+const loadBalancer = (service)=>{
+    
+}
+app.use('/api/users', authenticate,proxyWorker, next);
+app.use('/api/orders', authenticate, proxyWorker2, next);
 
 app.listen(port, ()=>{
     console.log(`proxy is running on ${port}`)
