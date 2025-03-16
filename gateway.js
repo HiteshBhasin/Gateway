@@ -4,6 +4,7 @@ const {createProxyMiddleware} = require("http-proxy-middleware");
 require('dotenv').config();
 //https://www.geeksforgeeks.org/json-web-token-jwt/
 const jwt = require("jasonwebtoken");
+const exp_jwt = require("express-jwt");
 const port = process.env.PORT || 3000;
 const key = process.env.SECRET_KEY || "superkey";
 
@@ -15,6 +16,8 @@ const SERVICE = {
 
     orders: 'http://localhost:3002/orders' 
 };
+
+const authenticate = exp_jwt({secret:key, algorithm: ['HS256']});
 
 app.get("/status", (req,res)=>{
     res.send("running a http proxy api")
@@ -30,8 +33,8 @@ const proxyWorker2 = createProxyMiddleware({
     changeOrigin: true,
     pathRewrite: { '^/api/orders': '/orders' }, 
 });
-app.use('/api/users', proxyWorker);
-app.use('/api/orders', proxyWorker2);
+app.use('/api/users', proxyWorker, next);
+app.use('/api/orders', proxyWorker2, next);
 
 app.listen(port, ()=>{
     console.log(`proxy is running on ${port}`)
