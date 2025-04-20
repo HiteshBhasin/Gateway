@@ -35,7 +35,8 @@ const proxyWorker2 = createProxyMiddleware({
 });
 
 const loadBalancer = (service)=>{
-    
+    //  need to figure out which load balance calculation need to go here based on 
+    // reqest per min and how much a server can take.  
 }
 app.use('/api/users', authenticate,proxyWorker, next);
 app.use('/api/orders', authenticate, proxyWorker2, next);
